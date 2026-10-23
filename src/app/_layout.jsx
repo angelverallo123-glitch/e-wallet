@@ -6,6 +6,9 @@ export default function RootLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="register" />
       <Stack.Screen name="home" />
+      <Stack.Screen name="transactions" />
+      <Stack.Screen name="add-money" />
+      <Stack.Screen name="details/[id]" />
     </Stack>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors } from '../constants/theme';
 
 // One reusable input for every field in the app (plain text, email, phone,
@@ -15,6 +15,8 @@ export default function InputField({
   autoCapitalize,
   secureTextEntry,
   showIcon,
+  showPasswordToggle,
+  onToggleSecureTextEntry,
   labelRight,
   inputStyle,
   containerStyle,
@@ -28,15 +30,31 @@ export default function InputField({
 
       {showIcon ? (
         <View style={styles.iconContainer}>
-          <View style={styles.iconPlaceholder} />
           <TextInput
             style={styles.inputWithIcon}
             placeholder={placeholder}
             placeholderTextColor={colors.placeholder}
             secureTextEntry={secureTextEntry}
+            keyboardType={keyboardType}
+            autoCapitalize={autoCapitalize}
             value={value}
             onChangeText={onChangeText}
           />
+          {showPasswordToggle ? (
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel={secureTextEntry ? 'Show password' : 'Hide password'}
+              onPress={onToggleSecureTextEntry}
+              style={styles.toggle}
+            >
+              <View style={styles.eyeIcon}>
+                <View style={styles.eyeShape}>
+                  <View style={styles.eyePupil} />
+                </View>
+                {secureTextEntry ? <View style={styles.eyeSlash} /> : null}
+              </View>
+            </TouchableOpacity>
+          ) : null}
         </View>
       ) : (
         <TextInput
@@ -93,10 +111,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: '100%',
   },
-  iconPlaceholder: {
-    width: 20,
-    height: 20,
-    backgroundColor: colors.iconPlaceholder,
-    borderRadius: 4,
+  toggle: {
+    padding: 6,
+  },
+  eyeIcon: {
+    width: 27,
+    height: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  eyeShape: {
+    width: 25,
+    height: 15,
+    borderWidth: 3,
+    borderColor: colors.textMuted,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  eyePupil: {
+    width: 6,
+    height: 6,
+    borderRadius: 6,
+    backgroundColor: colors.textMuted,
+  },
+  eyeSlash: {
+    position: 'absolute',
+    width: 31,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: colors.textMuted,
+    transform: [{ rotate: '45deg' }],
   },
 });

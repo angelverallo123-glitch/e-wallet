@@ -21,13 +21,14 @@ const initialState = fields.reduce((acc, f) => ({ ...acc, [f.key]: '' }), {});
 export default function RegisterScreen() {
   const router = useRouter();
   const [values, setValues] = useState(initialState);
+  const [visiblePasswords, setVisiblePasswords] = useState({});
 
   const handleChange = (key) => (text) =>
     setValues((prev) => ({ ...prev, [key]: text }));
 
   const handleSubmit = () => {
     // Register API call goes here once the backend is wired up.
-    router.push('/index');
+    router.replace('/');
   };
 
   return (
@@ -45,7 +46,9 @@ export default function RegisterScreen() {
             label={field.label}
             placeholder={field.placeholder}
             keyboardType={field.keyboardType}
-            secureTextEntry={field.secureTextEntry}
+            secureTextEntry={field.secureTextEntry && !visiblePasswords[field.key]}
+            showPasswordToggle={field.secureTextEntry}
+            onToggleSecureTextEntry={() => setVisiblePasswords((visible) => ({ ...visible, [field.key]: !visible[field.key] }))}
             value={values[field.key]}
             onChangeText={handleChange(field.key)}
           />
@@ -58,7 +61,7 @@ export default function RegisterScreen() {
           style={styles.button}
         />
 
-        <TouchableOpacity onPress={() => router.push('/index')} style={styles.link}>
+        <TouchableOpacity onPress={() => router.replace('/')} style={styles.link}>
           <Text style={styles.linkText}>Already have an account? Sign in</Text>
         </TouchableOpacity>
       </View>
