@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors } from '../constants/theme';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { colors } from "../constants/theme";
 
 export default function WelcomeHeader({ name, initials, onProfilePress }) {
   return (
@@ -18,9 +17,9 @@ export default function WelcomeHeader({ name, initials, onProfilePress }) {
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 25,
   },
   smallText: {
@@ -29,19 +28,19 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.darkText,
   },
   profile: {
     width: 45,
     height: 45,
     borderRadius: 25,
-    backgroundColor: colors.accentBlue,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#079B62",
+    justifyContent: "center",
+    alignItems: "center",
   },
   profileText: {
     color: colors.white,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
