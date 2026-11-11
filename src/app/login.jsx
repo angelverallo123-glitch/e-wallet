@@ -9,46 +9,86 @@ import {
   View,
 } from "react-native";
 
+import { loginUser } from "../services/authStorage";
+
 export default function LoginScreen() {
   const router = useRouter();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  function handleLogin() {
-    if (!username.trim() || !password)
-      return Alert.alert("Missing information", "Enter username and password.");
-    if (username.trim() === "admin" && password === "admin123")
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin() {
+    if (loading) return;
+
+    if (!username.trim() || !password) {
+      Alert.alert("Missing information", "Enter your username and password.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const user = await loginUser(username, password);
+
+      if (!user) {
+        Alert.alert("Login Failed", "Incorrect username or password.");
+        return;
+      }
+
       router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", "Unable to log in. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
+
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Welcome Back</Text>
       <Text style={styles.subtitle}>Log in to MY E-WALLET</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Username"
         autoCapitalize="none"
+        autoCorrect={false}
         value={username}
         onChangeText={setUsername}
+        editable={!loading}
       />
+
       <TextInput
         style={styles.input}
         placeholder="Password"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
+        editable={!loading}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+        disabled={loading}
+      >
+        <Text style={styles.buttonText}>
+          {loading ? "Logging In..." : "Log In"}
+        </Text>
       </TouchableOpacity>
+
       <TouchableOpacity onPress={() => router.push("/register")}>
         <Text style={styles.link}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
+
       <TouchableOpacity onPress={() => router.back()}>
         <Text style={styles.link}>Back</Text>
       </TouchableOpacity>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -83,7 +123,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  buttonText: { color: "#fff", fontWeight: "bold", fontSize: 17 },
-  link: { color: "#148C50", textAlign: "center", marginTop: 22 },
-  hint: { textAlign: "center", color: "#777", marginTop: 30, fontSize: 12 },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 17,
+  },
+  link: {
+    color: "#148C50",
+    textAlign: "center",
+    marginTop: 22,
+  },
 });

@@ -84,9 +84,9 @@ export default function HomeScreen() {
       >
         {/* Welcome Header */}
         <WelcomeHeader
-          name="John Doe"
-          initials="JD"
-          onProfilePress={() => {}}
+          name="Angel Verallo"
+          initials="AV"
+          onProfilePress={() => router.push("/profile")}
         />
 
         {/* Wallet Balance */}
